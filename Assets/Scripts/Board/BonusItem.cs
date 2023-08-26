@@ -41,6 +41,18 @@ public class BonusItem : Item
         return prefabname;
     }
 
+    protected override int GetIndexTextureSkin()
+    {
+        return ItemType switch
+        {
+            eBonusType.NONE => 0,
+            eBonusType.HORIZONTAL => 0,
+            eBonusType.VERTICAL => 1,
+            eBonusType.ALL => 2,
+            _ => 0
+        };
+    }
+    
     internal override bool IsSameType(Item other)
     {
         BonusItem it = other as BonusItem;

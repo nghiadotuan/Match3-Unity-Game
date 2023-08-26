@@ -52,6 +52,21 @@ public class NormalItem : Item
 
         return prefabname;
     }
+    
+    protected override int GetIndexTextureSkin()
+    {
+        return ItemType switch
+        {
+            eNormalType.TYPE_ONE => 0,
+            eNormalType.TYPE_TWO => 1,
+            eNormalType.TYPE_THREE => 2,
+            eNormalType.TYPE_FOUR => 3,
+            eNormalType.TYPE_FIVE => 4,
+            eNormalType.TYPE_SIX => 5,
+            eNormalType.TYPE_SEVEN => 6,
+            _ => 0,
+        };
+    }
 
     internal override bool IsSameType(Item other)
     {

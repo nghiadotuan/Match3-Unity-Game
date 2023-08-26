@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Skin;
 using Utilities;
+using Object = UnityEngine.Object;
 
 [Serializable]
 public class Item
@@ -13,22 +15,30 @@ public class Item
     public Transform View { get; private set; }
 
 
-    public virtual void SetView()
+    public virtual void SetView(TextureSkin textureSkin)
     {
-        string prefabname = GetPrefabName();
+        // string prefabname = GetPrefabName();
+        //
+        // if (!string.IsNullOrEmpty(prefabname))
+        // {
+        //    // GameObject prefab = Resources.Load<GameObject>(prefabname);
+        //    var prefab = GameObjectCache.GetGameObjectFromResources(prefabname);
+        //     if (prefab)
+        //     {
+        //         View = GameObject.Instantiate(prefab).transform;
+        //     }
+        // }
 
-        if (!string.IsNullOrEmpty(prefabname))
-        {
-           // GameObject prefab = Resources.Load<GameObject>(prefabname);
-           var prefab = GameObjectCache.GetGameObjectFromResources(prefabname);
-            if (prefab)
-            {
-                View = GameObject.Instantiate(prefab).transform;
-            }
-        }
+        var index = GetIndexTextureSkin();
+        var prefab = Resources.Load<SpriteRenderer>(Constants.PREFAB_ITEM_BASE);
+        if(!prefab) return;
+        prefab.sprite = textureSkin.GetTextureItem(index);
+        View = Object.Instantiate(prefab).transform;
     }
 
     protected virtual string GetPrefabName() { return string.Empty; }
+
+    protected virtual int GetIndexTextureSkin() => 0;
 
     public virtual void SetCell(Cell cell)
     {

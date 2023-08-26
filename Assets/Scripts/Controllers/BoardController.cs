@@ -3,10 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Skin;
 using UnityEngine;
+using Utilities;
 
 public class BoardController : MonoBehaviour
 {
+    private SOTextureSkin _textureSkin;
+    
     public event Action OnMoveEvent = delegate { };
 
     public bool IsBusy { get; private set; }
@@ -41,7 +45,9 @@ public class BoardController : MonoBehaviour
 
         m_cam = Camera.main;
 
-        m_board = new Board(this.transform, gameSettings);
+        _textureSkin = GameObjectCache.GetAssetFromResources<SOTextureSkin>("TextureSkin");
+
+        m_board = new Board(this.transform, gameSettings, _textureSkin);
 
         Fill();
     }

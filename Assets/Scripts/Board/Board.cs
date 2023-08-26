@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Skin;
 using UnityEngine;
 using Utilities;
 
@@ -26,7 +27,9 @@ public class Board
 
     private int m_matchMin;
 
-    public Board(Transform transform, GameSettings gameSettings)
+    private readonly SOTextureSkin _textureSkin;
+
+    public Board(Transform transform, GameSettings gameSettings, SOTextureSkin textureSkin)
     {
         m_root = transform;
 
@@ -36,6 +39,8 @@ public class Board
         this.boardSizeY = gameSettings.BoardSizeY;
 
         m_cells = new Cell[boardSizeX, boardSizeY];
+
+        _textureSkin = textureSkin;
 
         CreateBoard();
     }
@@ -102,7 +107,7 @@ public class Board
                 }
 
                 item.SetType(Utils.GetRandomNormalTypeExcept(types.ToArray()));
-                item.SetView();
+                item.SetView(_textureSkin.GetTextureSkin());
                 item.SetViewRoot(m_root);
 
                 cell.Assign(item);
@@ -149,7 +154,7 @@ public class Board
                 NormalItem item = new NormalItem();
 
                 item.SetType(Utils.GetRandomNormalType());
-                item.SetView();
+                item.SetView(_textureSkin.GetTextureSkin());
                 item.SetViewRoot(m_root);
 
                 cell.Assign(item);
@@ -286,7 +291,7 @@ public class Board
                 cellToConvert = matches[rnd];
             }
 
-            item.SetView();
+            item.SetView(_textureSkin.BonusSkin);
             item.SetViewRoot(m_root);
 
             cellToConvert.Free();
