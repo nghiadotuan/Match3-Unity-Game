@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utilities;
 
 public class Board
 {
@@ -42,7 +43,8 @@ public class Board
     private void CreateBoard()
     {
         Vector3 origin = new Vector3(-boardSizeX * 0.5f + 0.5f, -boardSizeY * 0.5f + 0.5f, 0f);
-        GameObject prefabBG = Resources.Load<GameObject>(Constants.PREFAB_CELL_BACKGROUND);
+        //GameObject prefabBG = Resources.Load<GameObject>(Constants.PREFAB_CELL_BACKGROUND);
+        var prefabBG = GameObjectCache.GetGameObjectFromResources(Constants.PREFAB_CELL_BACKGROUND);
         for (int x = 0; x < boardSizeX; x++)
         {
             for (int y = 0; y < boardSizeY; y++)
@@ -69,7 +71,6 @@ public class Board
                 if (x > 0) m_cells[x, y].NeighbourLeft = m_cells[x - 1, y];
             }
         }
-
     }
 
     internal void Fill()
@@ -179,7 +180,10 @@ public class Board
         cell2.Assign(item);
 
         item.View.DOMove(cell2.transform.position, 0.3f);
-        item2.View.DOMove(cell1.transform.position, 0.3f).OnComplete(() => { if (callback != null) callback(); });
+        item2.View.DOMove(cell1.transform.position, 0.3f).OnComplete(() =>
+        {
+            if (callback != null) callback();
+        });
     }
 
     public List<Cell> GetHorizontalMatches(Cell cell)
@@ -350,7 +354,7 @@ public class Board
         var dir = GetMatchDirection(matches);
 
         var bonus = matches.Where(x => x.Item is BonusItem).FirstOrDefault();
-        if(bonus == null)
+        if (bonus == null)
         {
             return matches;
         }
@@ -367,6 +371,7 @@ public class Board
                         result.Add(cell);
                     }
                 }
+
                 break;
             case eMatchDirection.VERTICAL:
                 foreach (var cell in matches)
@@ -377,6 +382,7 @@ public class Board
                         result.Add(cell);
                     }
                 }
+
                 break;
             case eMatchDirection.ALL:
                 foreach (var cell in matches)
@@ -387,6 +393,7 @@ public class Board
                         result.Add(cell);
                     }
                 }
+
                 break;
         }
 
@@ -614,7 +621,8 @@ public class Board
 
         //look left
         third = null;
-        third = CheckThirdCell(target.NeighbourLeft, main); ;
+        third = CheckThirdCell(target.NeighbourLeft, main);
+        ;
         if (third != null)
         {
             return third;

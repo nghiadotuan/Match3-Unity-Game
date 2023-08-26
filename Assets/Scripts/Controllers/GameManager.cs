@@ -125,9 +125,11 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaitBoardController()
     {
+        var waitEndOfFrame = new WaitForEndOfFrame();
         while (m_boardController.IsBusy)
         {
-            yield return new WaitForEndOfFrame();
+           // yield return new WaitForEndOfFrame();
+           yield return waitEndOfFrame;
         }
 
         yield return new WaitForSeconds(1f);

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Utilities;
 
 [Serializable]
 public class Item
@@ -18,7 +19,8 @@ public class Item
 
         if (!string.IsNullOrEmpty(prefabname))
         {
-            GameObject prefab = Resources.Load<GameObject>(prefabname);
+           // GameObject prefab = Resources.Load<GameObject>(prefabname);
+           var prefab = GameObjectCache.GetGameObjectFromResources(prefabname);
             if (prefab)
             {
                 View = GameObject.Instantiate(prefab).transform;
