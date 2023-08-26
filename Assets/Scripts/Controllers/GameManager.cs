@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     }
 
     private eStateGame m_state;
+
     public eStateGame State
     {
         get { return m_state; }
@@ -41,7 +42,8 @@ public class GameManager : MonoBehaviour
 
     private BoardController m_boardController;
 
-    private UIMainManager m_uiMenu;
+    // Add SerializeField attribute
+    [SerializeField] private UIMainManager m_uiMenu;
 
     private LevelCondition m_levelCondition;
 
@@ -51,7 +53,8 @@ public class GameManager : MonoBehaviour
 
         m_gameSettings = Resources.Load<GameSettings>(Constants.GAME_SETTINGS_PATH);
 
-        m_uiMenu = FindObjectOfType<UIMainManager>();
+        // Remove FindObjectOfType
+        // m_uiMenu = FindObjectOfType<UIMainManager>();
         m_uiMenu.Setup(this);
     }
 
@@ -61,17 +64,20 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (m_boardController != null) m_boardController.Update();
-    }
+    
+    // Unnecessary, The Update function of m_boardController is self-running.
+    
+    // void Update()
+    // {
+    //     if (m_boardController != null) m_boardController.Update();
+    // }
 
 
     internal void SetState(eStateGame state)
     {
         State = state;
 
-        if(State == eStateGame.PAUSE)
+        if (State == eStateGame.PAUSE)
         {
             DOTween.PauseAll();
         }
