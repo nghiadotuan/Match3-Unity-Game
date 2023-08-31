@@ -10,7 +10,7 @@ using Utilities;
 public class BoardController : MonoBehaviour
 {
     private SOTextureSkin _textureSkin;
-    
+
     public event Action OnMoveEvent = delegate { };
 
     public bool IsBusy { get; private set; }
@@ -56,6 +56,12 @@ public class BoardController : MonoBehaviour
     {
         m_board.Fill();
         FindMatchesAndCollapse();
+        SetItemRootForCells();
+    }
+
+    private void SetItemRootForCells()
+    {
+        m_board.SetItemRoot();
     }
 
     private void OnGameStateChange(GameManager.eStateGame state)
@@ -71,6 +77,10 @@ public class BoardController : MonoBehaviour
             case GameManager.eStateGame.GAME_OVER:
                 m_gameOver = true;
                 StopHints();
+                break;
+            case GameManager.eStateGame.RESTART:
+                IsBusy = false;
+                Restart();
                 break;
         }
     }
@@ -121,10 +131,7 @@ public class BoardController : MonoBehaviour
                     {
                         IsBusy = true;
                         SetSortingLayer(c1, c2);
-                        m_board.Swap(c1, c2, () =>
-                        {
-                            FindMatchesAndCollapse(c1, c2);
-                        });
+                        m_board.Swap(c1, c2, () => { FindMatchesAndCollapse(c1, c2); });
 
                         ResetRayCast();
                     }
@@ -167,10 +174,7 @@ public class BoardController : MonoBehaviour
 
             if (matches.Count < m_gameSettings.MatchesMin)
             {
-                m_board.Swap(cell1, cell2, () =>
-                {
-                    IsBusy = false;
-                });
+                m_board.Swap(cell1, cell2, () => { IsBusy = false; });
             }
             else
             {
@@ -230,7 +234,7 @@ public class BoardController : MonoBehaviour
             matches[i].ExplodeItem();
         }
 
-        if(matches.Count > m_gameSettings.MatchesMin)
+        if (matches.Count > m_gameSettings.MatchesMin)
         {
             m_board.ConvertNormalToBonus(matches, cellEnd);
         }
@@ -308,5 +312,14 @@ public class BoardController : MonoBehaviour
         }
 
         m_potentialMatch.Clear();
+    }
+
+    private void Restart()
+    {
+        StopHints();
+        m_board.RestartBoard();
+        m_timeAfterFill = 0;
+        m_potentialMatch.Clear();
+        FindMatchesAndCollapse();
     }
 }

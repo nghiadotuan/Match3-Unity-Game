@@ -10,6 +10,8 @@ using Object = UnityEngine.Object;
 [Serializable]
 public class Item
 {
+    public int IndexTextureSkin { get; private set; }
+
     public Cell Cell { get; private set; }
 
     public Transform View { get; private set; }
@@ -29,20 +31,24 @@ public class Item
         //     }
         // }
 
-        var index = GetIndexTextureSkin();
+        IndexTextureSkin = GetIndexTextureSkin();
         var prefab = Resources.Load<SpriteRenderer>(Constants.PREFAB_ITEM_BASE);
-        if(!prefab) return;
-        prefab.sprite = textureSkin.GetTextureItem(index);
+        if (!prefab) return;
+        prefab.sprite = textureSkin.GetTextureItem(IndexTextureSkin);
         View = Object.Instantiate(prefab).transform;
     }
 
-    protected virtual string GetPrefabName() { return string.Empty; }
+    protected virtual string GetPrefabName()
+    {
+        return string.Empty;
+    }
 
     protected virtual int GetIndexTextureSkin() => 0;
 
     public virtual void SetCell(Cell cell)
     {
         Cell = cell;
+        View.name = "item_" + cell.name;
     }
 
     internal void AnimationMoveToPosition()
@@ -89,7 +95,6 @@ public class Item
         {
             sp.sortingOrder = 0;
         }
-
     }
 
     internal void ShowAppearAnimation()
@@ -116,10 +121,9 @@ public class Item
                     GameObject.Destroy(View.gameObject);
                     View = null;
                 }
-                );
+            );
         }
     }
-
 
 
     internal void AnimateForHint()
@@ -147,5 +151,18 @@ public class Item
             GameObject.Destroy(View.gameObject);
             View = null;
         }
+    }
+
+    internal void SetItem(TextureSkin textureSkin, DataCellRoot cellRoot)
+    {
+        SetItemType(cellRoot.IndexTextureSkin);
+        SetView(textureSkin);
+        View.GetComponent<SpriteRenderer>().sprite = textureSkin.GetTextureItem(cellRoot.IndexTextureSkin);
+        SetCell(cellRoot.Cell);
+        SetViewPosition(cellRoot.Position);
+    }
+
+    protected virtual void SetItemType(int indexTextureSkin)
+    {
     }
 }

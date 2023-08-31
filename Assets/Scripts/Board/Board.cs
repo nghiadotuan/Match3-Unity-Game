@@ -57,6 +57,9 @@ public class Board
                 GameObject go = GameObject.Instantiate(prefabBG);
                 go.transform.position = origin + new Vector3(x, y, 0f);
                 go.transform.SetParent(m_root);
+                
+                //TODO: remove set name cell
+                go.name = $"{x}_{y}";
 
                 Cell cell = go.GetComponent<Cell>();
                 cell.Setup(x, y);
@@ -66,6 +69,11 @@ public class Board
         }
 
         //set neighbours
+        SetNeighbours();
+    }
+
+    private void SetNeighbours()
+    {
         for (int x = 0; x < boardSizeX; x++)
         {
             for (int y = 0; y < boardSizeY; y++)
@@ -686,5 +694,30 @@ public class Board
                 m_cells[x, y] = null;
             }
         }
+    }
+
+    public void SetItemRoot()
+    {
+        for (int x = 0; x < boardSizeX; x++)
+        {
+            for (int y = 0; y < boardSizeY; y++)
+            {
+                var cell = m_cells[x, y];
+                cell.SetItemRoot(cell.Item);
+            }
+        }
+    }
+
+    public void RestartBoard()
+    {
+        for (int x = 0; x < boardSizeX; x++)
+        {
+            for (int y = 0; y < boardSizeY; y++)
+            {
+               m_cells[x, y].RestartCell(_textureSkin.GetTextureSkin());
+            }
+        }
+
+        FillGapsWithNewItems();
     }
 }

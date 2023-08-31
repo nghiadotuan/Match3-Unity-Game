@@ -1,6 +1,8 @@
 ﻿using System;
 using Skin;
 using UnityEngine;
+using DataCellRoot_1 = DataCellRoot;
+using Item_1 = Item;
 
 public class Cell : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class Cell : MonoBehaviour
     public int BoardY { get; private set; }
 
     public Item Item { get; private set; }
+    public DataCellRoot DataCellRoot { get; private set; }
 
     public Cell NeighbourUp { get; set; }
 
@@ -30,13 +33,19 @@ public class Cell : MonoBehaviour
     public bool IsNeighbour(Cell other)
     {
         return BoardX == other.BoardX && Mathf.Abs(BoardY - other.BoardY) == 1 ||
-            BoardY == other.BoardY && Mathf.Abs(BoardX - other.BoardX) == 1;
+               BoardY == other.BoardY && Mathf.Abs(BoardX - other.BoardX) == 1;
     }
 
 
     public void Free()
     {
         Item = null;
+    }
+
+    public void SetItemRoot(Item itemRoot)
+    {
+        DataCellRoot ??= new DataCellRoot();
+        DataCellRoot.SetData(itemRoot, this);
     }
 
     public void Assign(Item item)
@@ -90,5 +99,13 @@ public class Cell : MonoBehaviour
     internal void ApplyItemMoveToPosition()
     {
         Item.AnimationMoveToPosition();
+    }
+
+    internal void RestartCell(TextureSkin textureSkin)
+    {
+        ExplodeItem();
+        var item = new NormalItem();
+        item.SetItem(textureSkin, DataCellRoot);
+        Assign(item);
     }
 }

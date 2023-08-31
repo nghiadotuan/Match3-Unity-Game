@@ -74,4 +74,19 @@ public class NormalItem : Item
 
         return it != null && it.ItemType == this.ItemType;
     }
+
+    protected override void SetItemType(int indexTextureSkin)
+    {
+        ItemType = indexTextureSkin switch
+        {
+            0 => eNormalType.TYPE_ONE,
+            1 => eNormalType.TYPE_TWO,
+            2 => eNormalType.TYPE_THREE,
+            3 => eNormalType.TYPE_FOUR,
+            4 => eNormalType.TYPE_FIVE,
+            5 => eNormalType.TYPE_SIX,
+            6 => eNormalType.TYPE_SEVEN,
+            _=> eNormalType.TYPE_ONE
+        };
+    }
 }
