@@ -29,6 +29,10 @@ public class Board
 
     private readonly SOTextureSkin _textureSkin;
 
+    public int BoardSizeX => boardSizeX;
+    public int BoardSizeY => boardSizeY;
+    public Cell[,] Cells => m_cells;
+
     public Board(Transform transform, GameSettings gameSettings, SOTextureSkin textureSkin)
     {
         m_root = transform;
@@ -57,7 +61,7 @@ public class Board
                 GameObject go = GameObject.Instantiate(prefabBG);
                 go.transform.position = origin + new Vector3(x, y, 0f);
                 go.transform.SetParent(m_root);
-                
+
                 //TODO: remove set name cell
                 go.name = $"{x}_{y}";
 
@@ -152,6 +156,7 @@ public class Board
 
     internal void FillGapsWithNewItems()
     {
+        Utils.InitDicAmountNormalType(this);
         for (int x = 0; x < boardSizeX; x++)
         {
             for (int y = 0; y < boardSizeY; y++)
@@ -161,7 +166,10 @@ public class Board
 
                 NormalItem item = new NormalItem();
 
-                item.SetType(Utils.GetRandomNormalType());
+                // item.SetType(Utils.GetRandomNormalType());
+
+                var type = cell.GetTypeNormalItem();
+                item.SetType(type);
                 item.SetView(_textureSkin.GetTextureSkin());
                 item.SetViewRoot(m_root);
 
@@ -714,7 +722,7 @@ public class Board
         {
             for (int y = 0; y < boardSizeY; y++)
             {
-               m_cells[x, y].RestartCell(_textureSkin.GetTextureSkin());
+                m_cells[x, y].RestartCell(_textureSkin.GetTextureSkin());
             }
         }
 
