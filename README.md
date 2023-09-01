@@ -12,3 +12,15 @@ Create a restart button that when you click it, the game will play the previous 
 
 ## Problem4:
 Edit the FillGapsWithNewItems function (of the Board class) to create a new item different from the 4 surrounding cells. At the same time, prioritize choosing the type of item that has the least amount on the board.
+
+
+## Evaluate
+
+### Advantages:
+ - Simple design.
+
+### Disadvantages:
+- Using normal items prefab in resources folder is stiff and not yet flexible.
+
+### Suggestion:
+- Use object pool as an alternative to item destruction.
